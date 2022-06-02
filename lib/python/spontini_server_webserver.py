@@ -20,6 +20,7 @@ import sys
 import os
 import atexit
 from sys import argv
+
 sys.path.insert(1, os.path.join(os.path.dirname(__file__)))
 from spontini_server_utils import *
 
@@ -30,36 +31,38 @@ requiredModules = getWebServerConfParam("required-modules")
 
 setSpontiniLogger("spontini", sys.stdout)
 
-log("*** Checking required modules for \""+webserverName+"\" web server ***", "I")
+log('*** Checking required modules for "' + webserverName + '" web server ***', "I")
 pip3VenvCmd = os.path.join(getVenvedExecDir(), "pip3")
-installedModules = subprocess.check_output([pip3VenvCmd, "freeze"], encoding='utf-8')
+installedModules = subprocess.check_output([pip3VenvCmd, "freeze"], encoding="utf-8")
 error = False
 for module in requiredModules:
-  if module != "":
-    try:
-      error = not checkAndInstallModule(module, installedModules, log)
-      if error:
-        break
-    except:
-      log(traceback.format_exc(), "E")
-      error = True
-      break
+    if module != "":
+        try:
+            error = not checkAndInstallModule(module, installedModules, log)
+            if error:
+                break
+        except:
+            log(traceback.format_exc(), "E")
+            error = True
+            break
 
 if error:
-  log("Installation not completed", "C")
+    log("Installation not completed", "C")
 else:
-  log("", "I")
-  if webserverName == "daphne":
-    import daphne.cli
-    cliParams = getWebServerConfParam("cli-params")
-    setProtocolAndPortForPyGUIFromCLIParams(cliParams, webserverName)
-    cliParamsArr = cmdlineSplit(cliParams)
-    daphne.cli.CommandLineInterface().run(cliParamsArr)
-  elif webserverName == "uvicorn":
-    import uvicorn
-    from uvicorn_cli import cli
-    protocol = "http"
-    if "ssl_keyfile" in cli:
-      protocol = "https"
-    setProtocolAndPortForPyGUI(protocol, cli["port"])
-    uvicorn.run(**cli)
+    log("", "I")
+    if webserverName == "daphne":
+        import daphne.cli
+
+        cliParams = getWebServerConfParam("cli-params")
+        setProtocolAndPortForPyGUIFromCLIParams(cliParams, webserverName)
+        cliParamsArr = cmdlineSplit(cliParams)
+        daphne.cli.CommandLineInterface().run(cliParamsArr)
+    elif webserverName == "uvicorn":
+        import uvicorn
+        from uvicorn_cli import cli
+
+        protocol = "http"
+        if "ssl_keyfile" in cli:
+            protocol = "https"
+        setProtocolAndPortForPyGUI(protocol, cli["port"])
+        uvicorn.run(**cli)

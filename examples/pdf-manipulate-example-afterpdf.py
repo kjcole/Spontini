@@ -41,13 +41,16 @@ renderPDF.draw(drawing, mask, 10 * mm, 50 * mm)
 mask.drawImage(os.path.join(wsDirPath, "ouroboros.jpeg"), 10 * mm, 100 * mm, 105, 105)
 
 # Add a string to the mask
-mask.drawString(10 * mm, 145 * mm, 'Raster image scaled (intentionally blurry)')
+mask.drawString(10 * mm, 145 * mm, "Raster image scaled (intentionally blurry)")
 
 # Save the mask
 mask.save()
 
 # Merge the mask on the generated pdf-manipulate-example.pdf
-addMaskToPdf(os.path.join(wsDirPath, "mask.pdf"), os.path.join(wsDirPath, "pdf-manipulate-example.pdf"))
+addMaskToPdf(
+    os.path.join(wsDirPath, "mask.pdf"),
+    os.path.join(wsDirPath, "pdf-manipulate-example.pdf"),
+)
 
 # Remove the mask
 os.remove(os.path.join(wsDirPath, "mask.pdf"))

@@ -22,10 +22,10 @@ import traceback
 from sys import argv
 
 try:
-  if "https" in argv[1]:
-    #we are on the server(localhost)
-    httpx.post(argv[1], data=argv[2], verify=False)
-  else: #http
-    httpx.post(argv[1], data=argv[2])
+    if "https" in argv[1]:
+        # we are on the server(localhost)
+        httpx.post(argv[1], data=argv[2], verify=False)
+    else:  # http
+        httpx.post(argv[1], data=argv[2])
 except:
-  print(traceback.format_exc())
+    print(traceback.format_exc())
